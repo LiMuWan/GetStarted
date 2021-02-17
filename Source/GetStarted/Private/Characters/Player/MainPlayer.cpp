@@ -47,13 +47,18 @@ void AMainPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	check(PlayerInputComponent);
 	PlayerInputComponent->BindAxis("MoveForward", this, &AMainPlayer::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMainPlayer::MoveRight);
+
+	PlayerInputComponent->BindAxis("Turn", this, &ACharacter::AddControllerYawInput);
+	PlayerInputComponent->BindAxis("LookUp", this, &ACharacter::AddControllerPitchInput);
 }
 
 void AMainPlayer::MoveForward(float Value)
 {
+	AddMovementInput(GetActorForwardVector(), Value);
 }
 
 void AMainPlayer::MoveRight(float Value)
 {
+	AddMovementInput(GetActorRightVector(), Value);
 }
 
