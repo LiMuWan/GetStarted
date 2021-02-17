@@ -4,6 +4,7 @@
 #include "Characters/Player/MainPlayer.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
+#include "Components/CapsuleComponent.h"
 
 // Sets default values
 AMainPlayer::AMainPlayer()
@@ -17,6 +18,11 @@ AMainPlayer::AMainPlayer()
 
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
+
+	GetCapsuleComponent()->SetCapsuleSize(35.0f, 100.0f);
+
+	GetMesh()->SetRelativeLocation(FVector(0.0f, 0.0f, -100.0f));
+	GetMesh()->SetRelativeRotation(FRotator(0.0f, -90.0f, 0.0f));
 }
 
 // Called when the game starts or when spawned
