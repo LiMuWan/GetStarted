@@ -5,6 +5,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/InputComponent.h"
 
 // Sets default values
 AMainPlayer::AMainPlayer()
@@ -43,6 +44,16 @@ void AMainPlayer::Tick(float DeltaTime)
 void AMainPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	check(PlayerInputComponent);
+	PlayerInputComponent->BindAxis("MoveForward", this, &AMainPlayer::MoveForward);
+	PlayerInputComponent->BindAxis("MoveRight", this, &AMainPlayer::MoveRight);
+}
 
+void AMainPlayer::MoveForward(float Value)
+{
+}
+
+void AMainPlayer::MoveRight(float Value)
+{
 }
 
