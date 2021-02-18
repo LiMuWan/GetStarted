@@ -100,10 +100,16 @@ void AMainPlayer::Turn(float Value)
 
 void AMainPlayer::LookUp(float Value)
 {
-	if (Value != 0.0f)
+	//UE_LOG(LogTemp, Warning, TEXT("%f"), Value/*GetControlRotation().Pitch*/);
+	if (GetControlRotation().Pitch < 270.0f && GetControlRotation().Pitch > 180.0f && Value > 0.0f)
 	{
-		AddControllerPitchInput(Value);
+		return;
 	}
+	if (GetControlRotation().Pitch > 45.0f && GetControlRotation().Pitch < 180.0f && Value < 0.0f)
+	{
+		return;
+	}
+	AddControllerPitchInput(Value);
 }
 
 void AMainPlayer::TurnAtRate(float Rate)
@@ -118,9 +124,14 @@ void AMainPlayer::TurnAtRate(float Rate)
 void AMainPlayer::LookUpAtRate(float Rate)
 {
 	float Value = Rate * BaseLookUpRate * GetWorld()->DeltaTimeSeconds;
-	if (Value != 0.0f)
+	if (GetControlRotation().Pitch < 270.0f && GetControlRotation().Pitch > 180.0f && Value > 0.0f)
 	{
-		AddControllerPitchInput(Value);
+		return;
 	}
+	if (GetControlRotation().Pitch > 45.0f && GetControlRotation().Pitch < 180.0f && Value < 0.0f)
+	{
+		return;
+	}
+	AddControllerPitchInput(Value);
 }
 
