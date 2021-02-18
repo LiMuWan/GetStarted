@@ -20,6 +20,10 @@ public:
 
 	UPROPERTY(VisibleAnyWhere, BlueprintReadOnly)
 		class UCameraComponent* FollowCamera;
+
+	float BaseTurnRate;
+
+	float BaseLookUpRate;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -35,4 +39,11 @@ public:
 
 	void MoveRight(float Value);
 
+	void Turn(float Value);
+
+	void LookUp(float Value);
+
+	void TurnAtRate(float Rate);
+
+	void LookUpAtRate(float Rate);
 };
