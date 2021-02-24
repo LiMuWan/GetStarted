@@ -17,6 +17,7 @@ ATriggerableDoor::ATriggerableDoor()
 
 	DoorMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("DoorMesh"));
 	DoorMesh->SetupAttachment(GetRootComponent());
+
 }
 
 // Called when the game starts or when spawned
@@ -24,6 +25,8 @@ void ATriggerableDoor::BeginPlay()
 {
 	Super::BeginPlay();
 
+	TriggerBox->OnComponentBeginOverlap.AddDynamic(this, &ATriggerableDoor::OnOverlapBegin);
+	TriggerBox->OnComponentEndOverlap.AddDynamic(this, &ATriggerableDoor::OnOverlapEnd);
 }
 
 // Called every frame
@@ -31,5 +34,13 @@ void ATriggerableDoor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void ATriggerableDoor::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+}
+
+void ATriggerableDoor::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
 }
 
