@@ -3,6 +3,7 @@
 
 #include "GamePlay/TriggerableDoor.h"
 #include"Components/BoxComponent.h"
+#include "Characters/Player/MainPlayer.h"
 // Sets default values
 ATriggerableDoor::ATriggerableDoor()
 {
@@ -11,6 +12,12 @@ ATriggerableDoor::ATriggerableDoor()
 
 	TriggerBox = CreateDefaultSubobject<UBoxComponent>(TEXT("TriggerBox"));
 	RootComponent = TriggerBox;
+
+	TriggerBox->SetBoxExtent(FVector(60.0f, 60.0f, 30.0f));
+	TriggerBox->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	TriggerBox->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic);
+	TriggerBox->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+	TriggerBox->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
 
 	TriggerMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("TriggerMesh"));
 	TriggerMesh->SetupAttachment(GetRootComponent());
@@ -38,9 +45,19 @@ void ATriggerableDoor::Tick(float DeltaTime)
 
 void ATriggerableDoor::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	AMainPlayer* MainPlayer = Cast<AMainPlayer>(OtherActor);
+	if (MainPlayer)
+	{
+
+	}
 }
 
 void ATriggerableDoor::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
+	AMainPlayer* MainPlayer = Cast<AMainPlayer>(OtherActor);
+	if (MainPlayer)
+	{
+
+	}
 }
 
