@@ -24,7 +24,6 @@ ATriggerableDoor::ATriggerableDoor()
 
 	DoorMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("DoorMesh"));
 	DoorMesh->SetupAttachment(GetRootComponent());
-
 }
 
 // Called when the game starts or when spawned
@@ -34,6 +33,9 @@ void ATriggerableDoor::BeginPlay()
 
 	TriggerBox->OnComponentBeginOverlap.AddDynamic(this, &ATriggerableDoor::OnOverlapBegin);
 	TriggerBox->OnComponentEndOverlap.AddDynamic(this, &ATriggerableDoor::OnOverlapEnd);
+
+	InitTriggerLocation = TriggerMesh->GetComponentLocation();
+	InitDoorLocation = DoorMesh->GetComponentLocation();
 }
 
 // Called every frame
@@ -61,5 +63,17 @@ void ATriggerableDoor::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AA
 		RaiseTrigger();
 		CloseDoor();
 	}
+}
+
+void ATriggerableDoor::UpdateTriggerLocation(FVector Offset)
+{
+	const FVector NewLocation = InitTriggerLocation + Offset;
+	TriggerMesh->SetWorldLocation(NewLocation);
+}
+
+void ATriggerableDoor::UpdateDoorLocation(FVector Offset)
+{
+	const FVector NewLocation = InitDoorLocation + Offset;
+	DoorMesh->SetWorldLocation(NewLocation);
 }
 

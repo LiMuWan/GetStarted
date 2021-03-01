@@ -25,6 +25,12 @@ public:
 	UPROPERTY(VisibleAnyWhere, BlueprintReadWrite)
 		class UStaticMeshComponent* DoorMesh;
 
+	UPROPERTY(BlueprintReadWrite, Category = "Trigger Door | Trigger Properties")
+		FVector InitTriggerLocation;
+
+	UPROPERTY(BlueprintReadWrite, Category = "Trigger Door | Door Properties")
+		FVector InitDoorLocation;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -50,4 +56,10 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Triggerable Door | Door Switch ")
 		void CloseDoor();
+
+	UFUNCTION(BlueprintCallable, Category = "Trigger Door | Trigger Switch")
+		void UpdateTriggerLocation(FVector Offset);
+
+	UFUNCTION(BlueprintCallable, Category = "Trigger Door | Door Switch")
+		void UpdateDoorLocation(FVector Offset);
 };
