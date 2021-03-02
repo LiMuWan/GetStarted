@@ -31,6 +31,13 @@ public:
 	UPROPERTY(BlueprintReadWrite, Category = "Trigger Door | Door Properties")
 		FVector InitDoorLocation;
 
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Trigger Door | Door Properties")
+		float DelayTime;
+
+	FTimerHandle CloseDoorTimerHandle;
+
+	bool bIsPlayerOnTrigger;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

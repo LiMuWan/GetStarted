@@ -24,6 +24,9 @@ ATriggerableDoor::ATriggerableDoor()
 
 	DoorMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("DoorMesh"));
 	DoorMesh->SetupAttachment(GetRootComponent());
+
+	DelayTime = 2.0f;
+	bIsPlayerOnTrigger = false;
 }
 
 // Called when the game starts or when spawned
@@ -47,9 +50,11 @@ void ATriggerableDoor::Tick(float DeltaTime)
 
 void ATriggerableDoor::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	AMainPlayer* MainPlayer = Cast<AMainPlayer>(OtherActor);
+	const AMainPlayer* MainPlayer = Cast<AMainPlayer>(OtherActor);
 	if (MainPlayer)
 	{
+		if (!bIsPlayerOnTrigger) bIsPlayerOnTrigger = true;
+		GetWorldTimerManager().ClearTimer(CloseDoorTimerHandle);
 		OpenDoor();
 		LowerTrigger();
 	}
@@ -57,11 +62,21 @@ void ATriggerableDoor::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, 
 
 void ATriggerableDoor::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	AMainPlayer* MainPlayer = Cast<AMainPlayer>(OtherActor);
+	const AMainPlayer* MainPlayer = Cast<AMainPlayer>(OtherActor);
 	if (MainPlayer)
 	{
+		if (bIsPlayerOnTrigger) bIsPlayerOnTrigger = false;
 		RaiseTrigger();
-		CloseDoor();
+
+		auto DelayCloseDoor = [this]()
+		{
+			if (!bIsPlayerOnTrigger)
+			{
+				CloseDoor();
+			}
+		};
+
+		GetWorldTimerManager().SetTimer(CloseDoorTimerHandle, FTimerDelegate::CreateLambda(DelayCloseDoor), DelayTime, false);
 	}
 }
 

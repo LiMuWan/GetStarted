@@ -83,9 +83,9 @@ void AMainPlayer::MoveForward(float Value)
 {
 	if ((Controller != nullptr) && (Value != 0.0f))
 	{
-		FRotator Rotation = Controller->GetControlRotation();
-		FRotator YawRotation(0.0f, Rotation.Yaw, 0.0f);
-		FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+		const FRotator Rotation = Controller->GetControlRotation();
+		const FRotator YawRotation(0.0f, Rotation.Yaw, 0.0f);
+		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 		AddMovementInput(Direction, Value);
 	}
 }
@@ -94,9 +94,9 @@ void AMainPlayer::MoveRight(float Value)
 {
 	if ((Controller != nullptr) && (Value != 0.0f))
 	{
-		FRotator Rotation = Controller->GetControlRotation();
-		FRotator YawRotation(0.0f, Rotation.Yaw, 0.0f);
-		FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+		const FRotator Rotation = Controller->GetControlRotation();
+		const FRotator YawRotation(0.0f, Rotation.Yaw, 0.0f);
+		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 		AddMovementInput(Direction, Value);
 	}
 }
