@@ -50,3 +50,11 @@ TSubclassOf<AActor> AASpawVolume::GetSpawnActorClass()
 	}
 }
 
+void AASpawVolume::SpawnActor_Implementation(UClass* SpawnClass, FVector SpawnLocation)
+{
+	if (SpawnClass)
+	{
+		GetWorld()->SpawnActor<AActor>(SpawnClass, SpawnLocation, FRotator(0.0f));
+	}
+}
+
