@@ -16,6 +16,9 @@ AFloatingPlatform::AFloatingPlatform()
 	EndPoint = FVector(0.0f);
 
 	InterpSpeed = 200.0f;
+	Distance = 0.0f;
+	bInterping = true;
+	DelayTime = 1.0f;
 }
 
 // Called when the game starts or when spawned
@@ -25,7 +28,7 @@ void AFloatingPlatform::BeginPlay()
 
 	StartPoint = GetActorLocation();
 	EndPoint = StartPoint + EndPoint;
-
+	Distance = (EndPoint - StartPoint).Size();
 }
 
 // Called every frame
@@ -33,8 +36,29 @@ void AFloatingPlatform::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	const FVector Current = GetActorLocation();
-	const FVector InterpLocation = FMath::VInterpConstantTo(Current, EndPoint, DeltaTime, InterpSpeed);
-	SetActorLocation(InterpLocation);
+	if (bInterping)
+	{
+		const FVector Current = GetActorLocation();
+		const FVector InterpLocation = FMath::VInterpConstantTo(Current, EndPoint, DeltaTime, InterpSpeed);
+		SetActorLocation(InterpLocation);
+
+		const float NowDistance = (GetActorLocation() - StartPoint).Size();
+		/*UE_LOG(LogTemp, Warning, TEXT("%f"), NowDistance);*/
+		if (Distance - NowDistance <= 0.5f)
+		{
+			const auto ToggleInterpingState = [this]()
+			{
+				bInterping = !bInterping;
+			};
+
+			ToggleInterpingState();
+
+			GetWorldTimerManager().SetTimer(InterpTimerHandle, FTimerDelegate::CreateLambda(ToggleInterpingState), DelayTime, false);
+
+			const FVector TempVec = StartPoint;
+			StartPoint = EndPoint;
+			EndPoint = TempVec;
+		}
+	}
 }
 

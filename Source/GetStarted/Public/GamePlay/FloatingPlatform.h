@@ -26,6 +26,17 @@ public:
 
 	UPROPERTY(EditAnyWhere, Category = "Floating Platform")
 		float InterpSpeed;
+
+	UPROPERTY(VisibleAnyWhere, Category = "Floating Platform")
+		float Distance;
+
+	UPROPERTY(VisibleAnyWhere, Category = "Floating Platform")
+		bool bInterping;
+
+	UPROPERTY(VisibleAnyWhere, Category = "Floating Platform")
+		float DelayTime;
+
+	FTimerHandle InterpTimerHandle;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
