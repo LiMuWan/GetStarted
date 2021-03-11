@@ -7,11 +7,20 @@
 #include "Level1GameMode.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class GETSTARTED_API ALevel1GameMode : public AGameModeBase
 {
 	GENERATED_BODY()
-	
+
+public:
+	UPROPERTY(EditAnyWhere, BlueprintReadOnly, Category = "UI Widgets")
+		TSubclassOf<class UUserWidget> MainUIClass;
+
+	UPROPERTY(VisibleAnyWhere, BlueprintReadOnly, Category = "UI Widgets")
+		UUserWidget* MainUI;
+
+protected:
+	virtual void BeginPlay() override;
 };
