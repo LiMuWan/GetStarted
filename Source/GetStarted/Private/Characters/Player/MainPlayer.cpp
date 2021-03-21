@@ -152,3 +152,18 @@ void AMainPlayer::LookUpAtRate(float Rate)
 	AddControllerPitchInput(Value);
 }
 
+void AMainPlayer::IncreaseHealth(float Value)
+{
+	Health = FMath::Clamp(Health + Value, 0.0f, MaxHealth);
+}
+
+void AMainPlayer::IncreaseStamina(float Value)
+{
+	Stamina = FMath::Clamp(Stamina + Value, 0.0f, MaxStamina);
+}
+
+void AMainPlayer::IncreaseCoins(int Value)
+{
+	Coins += Value;
+}
+

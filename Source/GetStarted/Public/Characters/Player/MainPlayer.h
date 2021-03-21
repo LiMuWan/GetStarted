@@ -63,4 +63,10 @@ public:
 	void TurnAtRate(float Rate);
 
 	void LookUpAtRate(float Rate);
+
+	void IncreaseHealth(float Value);
+
+	void IncreaseStamina(float Value);
+
+	void IncreaseCoins(int Value);
 };
