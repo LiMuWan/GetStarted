@@ -69,4 +69,6 @@ public:
 	void IncreaseStamina(float Value);
 
 	void IncreaseCoins(int Value);
+
+	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 };

@@ -167,3 +167,16 @@ void AMainPlayer::IncreaseCoins(int Value)
 	Coins += Value;
 }
 
+float AMainPlayer::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	if (Health - Damage <= 0.0f)
+	{
+		Health = FMath::Clamp(Health - Damage, 0.0f, MaxHealth);
+	}
+	else
+	{
+		Health -= Damage;
+	}
+	return Health;
+}
+
