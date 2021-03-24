@@ -6,6 +6,23 @@
 #include "GameFramework/Character.h"
 #include "MainPlayer.generated.h"
 
+UENUM(BlueprintType)
+enum class EPlayerMovementStatus :uint8
+{
+	EPMS_Normal  UMETA(DisplayName = "Normal"),
+	EPMS_Sprinting	UMETA(DisplayName = "Sprinting"),
+	EPMS_Dead	UMETA(DisplayName = "Dead")
+};
+
+UENUM(BlueprintType)
+enum class EPlayerStaminaStatus :uint8
+{
+	EPMS_Normal  UMETA(DisplayName = "Normal"),
+	EPMS_Exhausted	UMETA(DisplayName = "Exhausted"),
+	EPMS_ExhaustedRecovering UMETA(DisplayName = "ExhaustedRecovering")
+};
+
+
 UCLASS()
 class GETSTARTED_API AMainPlayer : public ACharacter
 {
@@ -39,6 +56,25 @@ public:
 
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Player Staus")
 		int32 Coins;
+
+	UPROPERTY(EditAnyWhere, BlueprintReadOnly, Category = "Player Status")
+		float StaminaConsumeRate;
+
+	UPROPERTY(EditAnyWhere, BlueprintReadOnly, Category = "Player Status")
+		float ExhaustedStaminaRatio;
+
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Player Status")
+		EPlayerStaminaStatus PlayerStaminaStatus;
+
+	UPROPERTY(EditAnyWhere, BlueprintReadOnly, Category = "Player Status")
+		float RunningSpeed;
+
+	UPROPERTY(EditAnyWhere, BlueprintReadOnly, Category = "Player Status")
+		float SprintingSpeed;
+
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Player Status")
+		EPlayerMovementStatus PlayerMovementStatus;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
