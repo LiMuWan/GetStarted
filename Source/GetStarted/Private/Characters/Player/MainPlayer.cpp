@@ -48,11 +48,13 @@ AMainPlayer::AMainPlayer()
 
 	StaminaConsumeRate = 20.0f;
 	ExhaustedStaminaRatio = 0.167f;
-	PlayerStaminaStatus = EPlayerStaminaStatus::EPMS_Normal;
+	PlayerStaminaStatus = EPlayerStaminaStatus::EPSS_Normal;
 
 	RunningSpeed = 600.0f;
 	SprintingSpeed = 900.0f;
 	PlayerMovementStatus = EPlayerMovementStatus::EPMS_Normal;
+
+	bLeftShiftKeyDown = false;
 }
 
 // Called when the game starts or when spawned
@@ -67,6 +69,56 @@ void AMainPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	switch (PlayerStaminaStatus)
+	{
+		case EPlayerStaminaStatus::EPSS_Normal:
+			if (bLeftShiftKeyDown)
+			{
+				if (Stamina - StaminaConsumeRate * DeltaTime <= MaxStamina * ExhaustedStaminaRatio)
+				{
+					PlayerStaminaStatus = EPlayerStaminaStatus::EPSS_Exhausted;
+				}
+				Stamina -= StaminaConsumeRate * DeltaTime;
+				SetPlayerMovementStatus(EPlayerMovementStatus::EPMS_Sprinting);
+			}
+			else
+			{
+				Stamina = FMath::Clamp(Stamina + StaminaConsumeRate * DeltaTime, 0.0f, MaxStamina);
+			}
+			break;
+		case EPlayerStaminaStatus::EPSS_Exhausted:
+			if (bLeftShiftKeyDown)
+			{
+				if (Stamina - StaminaConsumeRate * DeltaTime <= 0.0f)
+				{
+					PlayerStaminaStatus = EPlayerStaminaStatus::EPSS_ExhaustedRecovering;
+					LeftShiftKeyUp();
+					SetPlayerMovementStatus(EPlayerMovementStatus::EPMS_Normal);
+				}
+				else
+				{
+					Stamina -= StaminaConsumeRate * DeltaTime;
+				}
+			}
+			else
+			{
+				PlayerStaminaStatus = EPlayerStaminaStatus::EPSS_ExhaustedRecovering;
+				Stamina = FMath::Clamp(Stamina + StaminaConsumeRate * DeltaTime, 0.0f, MaxStamina);
+				SetPlayerMovementStatus(EPlayerMovementStatus::EPMS_Normal);
+			}
+			break;
+		case EPlayerStaminaStatus::EPSS_ExhaustedRecovering:
+			if (Stamina + StaminaConsumeRate * DeltaTime >= MaxStamina * ExhaustedStaminaRatio)
+			{
+				PlayerStaminaStatus = EPlayerStaminaStatus::EPSS_Normal;
+			}
+			Stamina += StaminaConsumeRate * DeltaTime;
+			LeftShiftKeyUp();
+			SetPlayerMovementStatus(EPlayerMovementStatus::EPMS_Normal);
+			break;
+		default:
+			break;
+	}
 }
 
 // Called to bind functionality to input
@@ -77,6 +129,9 @@ void AMainPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 
 	PlayerInputComponent->BindAction("Jump", EInputEvent::IE_Pressed, this, &AMainPlayer::Jump);
 	PlayerInputComponent->BindAction("Jump", EInputEvent::IE_Released, this, &ACharacter::StopJumping);
+
+	PlayerInputComponent->BindAction("Sprint", EInputEvent::IE_Pressed, this, &AMainPlayer::LeftShiftKeyDown);
+	PlayerInputComponent->BindAction("Sprint", EInputEvent::IE_Released, this, &AMainPlayer::LeftShiftKeyUp);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AMainPlayer::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMainPlayer::MoveRight);
@@ -186,5 +241,20 @@ float AMainPlayer::TakeDamage(float Damage, FDamageEvent const& DamageEvent, ACo
 		Health -= Damage;
 	}
 	return Health;
+}
+
+void AMainPlayer::SetPlayerMovementStatus(EPlayerMovementStatus status)
+{
+	PlayerMovementStatus = status;
+
+	switch (status)
+	{
+		case EPlayerMovementStatus::EPMS_Sprinting:
+			GetCharacterMovement()->MaxWalkSpeed = SprintingSpeed;
+			break;
+		default:
+			GetCharacterMovement()->MaxWalkSpeed = RunningSpeed;
+			break;
+	}
 }
 

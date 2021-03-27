@@ -17,9 +17,9 @@ enum class EPlayerMovementStatus :uint8
 UENUM(BlueprintType)
 enum class EPlayerStaminaStatus :uint8
 {
-	EPMS_Normal  UMETA(DisplayName = "Normal"),
-	EPMS_Exhausted	UMETA(DisplayName = "Exhausted"),
-	EPMS_ExhaustedRecovering UMETA(DisplayName = "ExhaustedRecovering")
+	EPSS_Normal  UMETA(DisplayName = "Normal"),
+	EPSS_Exhausted	UMETA(DisplayName = "Exhausted"),
+	EPSS_ExhaustedRecovering UMETA(DisplayName = "ExhaustedRecovering")
 };
 
 
@@ -75,6 +75,8 @@ public:
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Player Status")
 		EPlayerMovementStatus PlayerMovementStatus;
 
+	bool bLeftShiftKeyDown;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -110,4 +112,10 @@ public:
 		void IncreaseCoins(int Value);
 
 	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+
+	FORCEINLINE void LeftShiftKeyDown() { bLeftShiftKeyDown = true; }
+
+	FORCEINLINE void LeftShiftKeyUp() { bLeftShiftKeyDown = false; }
+
+	void SetPlayerMovementStatus(EPlayerMovementStatus status);
 };
