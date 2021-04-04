@@ -77,6 +77,14 @@ public:
 
 	bool bLeftShiftKeyDown;
 
+	bool bHasWeapon;
+
+	UPROPERTY(VisibleAnyWhere, BlueprintReadOnly, Category = "Weapon")
+		class AWeaponItem* EquippedWeapon;
+
+	UPROPERTY(VisibleAnyWhere, BlueprintReadOnly, Category = "Weapon")
+		class AWeaponItem* OverLappingWeapon;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
