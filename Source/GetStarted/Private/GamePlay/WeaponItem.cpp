@@ -12,3 +12,23 @@ AWeaponItem::AWeaponItem()
 	DisplayMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("DisplaySkeletalMesh"));
 	DisplayMesh->SetupAttachment(GetRootComponent());
 }
+
+void AWeaponItem::BeginPlay()
+{
+}
+
+void AWeaponItem::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+}
+
+void AWeaponItem::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+}
+
+void AWeaponItem::Equip()
+{
+}
+
+void AWeaponItem::UnEquip()
+{
+}
