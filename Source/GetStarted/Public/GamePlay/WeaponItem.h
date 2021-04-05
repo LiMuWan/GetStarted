@@ -24,10 +24,10 @@ class GETSTARTED_API AWeaponItem : public AInteractableItem
 public:
 	AWeaponItem();
 
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Weapon|Sound")
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Weapon | Sound")
 		class USoundCue* OnEquippedSound;
 
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Weapon|Particle")
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Weapon | Particle")
 		bool bShouldReserveIdleParticle;
 
 	UPROPERTY(VisibleAnyWhere, BlueprintReadWrite, Category = "Weapon")
@@ -41,7 +41,7 @@ public:
 
 	virtual	void OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) override;
 
-	void Equip();
+	void Equip(class AMainPlayer* MainPlayer);
 
-	void UnEquip();
+	void UnEquip(AMainPlayer* MainPlayer);
 };

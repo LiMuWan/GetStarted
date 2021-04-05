@@ -126,4 +126,6 @@ public:
 	FORCEINLINE void LeftShiftKeyUp() { bLeftShiftKeyDown = false; }
 
 	void SetPlayerMovementStatus(EPlayerMovementStatus status);
+
+	void InteractKeyDown();
 };

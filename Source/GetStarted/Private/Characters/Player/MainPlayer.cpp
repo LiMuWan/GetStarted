@@ -7,7 +7,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
-
+#include "GamePlay/WeaponItem.h"
 // Sets default values
 AMainPlayer::AMainPlayer()
 {
@@ -133,6 +133,8 @@ void AMainPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	PlayerInputComponent->BindAction("Sprint", EInputEvent::IE_Pressed, this, &AMainPlayer::LeftShiftKeyDown);
 	PlayerInputComponent->BindAction("Sprint", EInputEvent::IE_Released, this, &AMainPlayer::LeftShiftKeyUp);
 
+	PlayerInputComponent->BindAction("Interact", EInputEvent::IE_Pressed, this, &AMainPlayer::InteractKeyDown);
+
 	PlayerInputComponent->BindAxis("MoveForward", this, &AMainPlayer::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMainPlayer::MoveRight);
 
@@ -255,6 +257,33 @@ void AMainPlayer::SetPlayerMovementStatus(EPlayerMovementStatus status)
 		default:
 			GetCharacterMovement()->MaxWalkSpeed = RunningSpeed;
 			break;
+	}
+}
+
+void AMainPlayer::InteractKeyDown()
+{
+	if (OverLappingWeapon)
+	{
+		if (EquippedWeapon)
+		{
+			//装备的武器卸下
+			//碰到的武器装备
+			EquippedWeapon->UnEquip(this);
+			OverLappingWeapon->Equip(this);
+		}
+		else
+		{
+			//装备
+			OverLappingWeapon->Equip(this);
+		}
+	}
+	else
+	{
+		if (EquippedWeapon)
+		{
+			//装备的武器卸下
+			EquippedWeapon->UnEquip(this);
+		}
 	}
 }
 
