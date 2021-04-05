@@ -10,6 +10,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "UObject/ConstructorHelpers.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 AWeaponItem::AWeaponItem()
 {
@@ -94,4 +95,20 @@ void AWeaponItem::Equip(AMainPlayer* MainPlayer)
 
 void AWeaponItem::UnEquip(AMainPlayer* MainPlayer)
 {
+	// 如果不是跳跃状态
+	if (MainPlayer && !MainPlayer->GetMovementComponent()->IsFalling())
+	{
+		WeaponState = EWeaponState::EWS_CanPickup;
+
+		MainPlayer->bHasWeapon = false;
+		MainPlayer->EquippedWeapon = nullptr;
+		if (MainPlayer->OverLappingWeapon == nullptr)
+		{
+			MainPlayer->OverLappingWeapon = this;
+		}
+
+		DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		SetActorRotation(FRotator(0.0f));
+		SetActorScale3D(FVector(1.0f));
+	}
 }
