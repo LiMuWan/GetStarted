@@ -18,6 +18,7 @@ AWeaponItem::AWeaponItem()
 	DisplayMesh->DestroyComponent();
 	DisplayMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("DisplaySkeletalMesh"));
 	DisplayMesh->SetupAttachment(GetRootComponent());
+	ActiveDisplayMeshCollision();
 
 	static ConstructorHelpers::FObjectFinder<USoundCue> SoundCueAsset(TEXT("SoundCue'/Game/Assets/Audios/Blade_Cue.Blade_Cue'"));
 	if (SoundCueAsset.Succeeded())
@@ -67,6 +68,8 @@ void AWeaponItem::Equip(AMainPlayer* MainPlayer)
 	if (MainPlayer)
 	{
 		WeaponState = EWeaponState::EWS_Equipped;
+		DeactiveDisplayMeshCollision();
+
 		const USkeletalMeshSocket* RightHandSocket = MainPlayer->GetMesh()->GetSocketByName("RightHandSocket");
 		if (RightHandSocket)
 		{
@@ -99,6 +102,7 @@ void AWeaponItem::UnEquip(AMainPlayer* MainPlayer)
 	if (MainPlayer && !MainPlayer->GetMovementComponent()->IsFalling())
 	{
 		WeaponState = EWeaponState::EWS_CanPickup;
+		ActiveDisplayMeshCollision();
 
 		MainPlayer->bHasWeapon = false;
 		MainPlayer->EquippedWeapon = nullptr;
@@ -111,4 +115,17 @@ void AWeaponItem::UnEquip(AMainPlayer* MainPlayer)
 		SetActorRotation(FRotator(0.0f));
 		SetActorScale3D(FVector(1.0f));
 	}
+}
+
+void AWeaponItem::ActiveDisplayMeshCollision()
+{
+	DisplayMesh->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+	DisplayMesh->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic);
+	DisplayMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+	DisplayMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Block);
+}
+
+void AWeaponItem::DeactiveDisplayMeshCollision()
+{
+	DisplayMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }

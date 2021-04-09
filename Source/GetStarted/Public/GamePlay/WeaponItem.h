@@ -44,4 +44,8 @@ public:
 	void Equip(class AMainPlayer* MainPlayer);
 
 	void UnEquip(AMainPlayer* MainPlayer);
+
+	void ActiveDisplayMeshCollision();
+
+	void DeactiveDisplayMeshCollision();
 };
